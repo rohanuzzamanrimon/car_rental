@@ -51,9 +51,10 @@ ob_end_flush();
     <title>Speedy Cars - Post-Login Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lora:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     
 </head>
+
 <body>
     <header>
         <div class="logo"> 
@@ -68,10 +69,43 @@ ob_end_flush();
 
             <span class="user-welcome">Welcome, <?php echo htmlspecialchars($_SESSION['email']); ?> <a href="logout.php">Logout</a></span>
         </nav>
+        <div class="search-section">
+    <div class="search-container">
+       
+        <div class="search-bar">
+            <input type="text" id="carSearch" placeholder="Search by car model, type, or price range...">
+            <button type="button" id="clearSearch">Clear</button>
+        </div>
+        <div class="search-filters">
+            <select id="typeFilter">
+                <option value="">All Types</option>
+                <option value="Sedan">Sedan</option>
+                <option value="SUV">SUV</option>
+                <option value="Sports">Sports</option>
+                <option value="Luxury">Luxury</option>
+            </select>
+            <select id="priceFilter">
+                <option value="">All Prices</option>
+                <option value="0-100">$0 - $100</option>
+                <option value="101-200">$101 - $200</option>
+                <option value="201-500">$201 - $500</option>
+                <option value="500+">$500+</option>
+            </select>
+        </div>
+    </div>
+</div>
     </header>
     <section class="hero" id="home">
         <div class="hero-content">
-            <h1>Redefining Luxury Rentals</h1>
+            <h1 class="animated-heading">
+  <span class="text-rotation">
+    <span class="text">Redefining Luxury Rentals</span>
+    <span class="text">Experience Premium Travel</span>
+    <span class="text">Drive Your Dreams Today</span>
+    <span class="text">Luxury at Your Fingertips</span>
+  </span>
+</h1>
+
             <p>Elevate your journey with our handpicked collection of extraordinary vehicles.</p>
             <button class="cta-btn">Discover Now</button>
         </div>
@@ -118,6 +152,9 @@ ob_end_flush();
             <?php endforeach; ?>
         </div>
     </section>
+    <!-- Add this after the closing </div> of hero section -->
+
+
     <!-- Booking Modal -->
     <div class="modal" id="bookingModal">
         <div class="modal-content">
@@ -137,17 +174,120 @@ ob_end_flush();
             </form>
         </div>
     </div>
+    <?php
+// Fetch all routes from your database (make sure $conn is your PDO connection)
+$stmt = $conn->query("SELECT * FROM routes ORDER BY id DESC");
+$routes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+<section class="routes-section">
+  <div class="routes-header">
+    <h2>Popular Routes</h2>
+    <p>Plan your trip with ease. See cost estimates and book instantly for stress-free travel!</p>
+  </div>
+  <div class="routes-list">
+    <?php foreach ($routes as $route): ?>
+    <div class="route-card">
+      <span class="route-icon">🚗</span>
+      <span class="route-from"><?php echo htmlspecialchars($route['route_from']); ?></span>
+      <span class="route-to">→ <?php echo htmlspecialchars($route['route_to']); ?></span>
+      <span class="route-price">Starts from $<?php echo htmlspecialchars($route['price']); ?></span>
+    </div>
+    <?php endforeach; ?>
+  </div>
+</section>
     <footer id="contact">
         <p>© 2025 Speedy Cars. All Rights Reserved.</p>
         <p>Contact us: <a href="rohanuzzamanrimon@gmail.com">info@speedycars.com</a> | +1 234 567 890</p>
         <p><a href="#">Facebook</a> | <a href="#">Instagram</a> | <a href="#">Twitter</a></p>
     </footer>
     <script>
+        
+// Wait for the page to load completely
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // Get references to our search elements
+    const searchInput = document.getElementById('carSearch');
+    const clearButton = document.getElementById('clearSearch');
+    const typeFilter = document.getElementById('typeFilter');
+    const priceFilter = document.getElementById('priceFilter');
+    const carCards = document.querySelectorAll('.car-card');
+    
+    // Function to filter cars based on search criteria
+    function filterCars() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const selectedType = typeFilter.value.toLowerCase();
+        const selectedPriceRange = priceFilter.value;
+        
+        carCards.forEach(card => {
+            // Get car details from the card
+            const carModel = card.querySelector('h3 a').textContent.toLowerCase();
+            const carType = card.querySelector('p').textContent.toLowerCase();
+            const carPrice = parseFloat(card.querySelector('p:nth-child(2)').textContent.match(/\$(\d+)/)[1]);
+            
+            // Check if car matches search criteria
+            let matchesSearch = true;
+            let matchesType = true;
+            let matchesPrice = true;
+            
+            // Search term matching
+            if (searchTerm) {
+                matchesSearch = carModel.includes(searchTerm) || carType.includes(searchTerm);
+            }
+            
+            // Type filter matching
+            if (selectedType) {
+                matchesType = carType.includes(selectedType);
+            }
+            
+            // Price filter matching
+            if (selectedPriceRange) {
+                if (selectedPriceRange === '0-100') {
+                    matchesPrice = carPrice >= 0 && carPrice <= 100;
+                } else if (selectedPriceRange === '101-200') {
+                    matchesPrice = carPrice >= 101 && carPrice <= 200;
+                } else if (selectedPriceRange === '201-500') {
+                    matchesPrice = carPrice >= 201 && carPrice <= 500;
+                } else if (selectedPriceRange === '500+') {
+                    matchesPrice = carPrice > 500;
+                }
+            }
+            
+            // Show or hide the car card based on all criteria
+            if (matchesSearch && matchesType && matchesPrice) {
+                card.style.display = 'block';
+                // Add a smooth fade-in effect
+                card.style.opacity = '0';
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                }, 100);
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+    
+    // Add event listeners for real-time search
+    searchInput.addEventListener('input', filterCars);
+    typeFilter.addEventListener('change', filterCars);
+    priceFilter.addEventListener('change', filterCars);
+    
+    // Clear search functionality
+    clearButton.addEventListener('click', function() {
+        searchInput.value = '';
+        typeFilter.value = '';
+        priceFilter.value = '';
+        filterCars(); // Reset all filters
+    });
+});
+
+
         gsap.from('.hero-content h1', { opacity: 0, y: -50, duration: 1.5, ease: 'power4.out' });
         gsap.from('.hero-content p', { opacity: 0, y: 30, duration: 1.5, delay: 0.5, ease: 'power4.out' });
         gsap.from('.cta-btn', { opacity: 0, scale: 0.9, duration: 1, delay: 1, ease: 'back.out(1.7)' });
         gsap.from('.car-card', { opacity: 0, y: 50, duration: 1, stagger: 0.2, scrollTrigger: { trigger: '.fleet-section', start: 'top 80%' } });
-
+        
+        // Modal code stays the same
         const modal = document.getElementById('bookingModal');
         const closeModal = document.querySelector('.close-modal');
         const carIdInput = document.getElementById('carIdInput');

@@ -1,5 +1,4 @@
-
-        :root {
+:root {
             --dark-bg: #1a1a1a;
             --muted-bg: #252525;
             --gold-accent: #d4af37;
@@ -46,11 +45,34 @@
             background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('hero-bg.jpg') no-repeat center/cover;
             position: relative;
         }
-        .hero-content h1 {
+        .hero-content .animated-heading {
+            height: 120px;
+            overflow: hidden;
+            position: relative;
             font-family: 'Playfair Display', serif;
             font-size: 3.5em;
             color: var(--gold-accent);
             text-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+            margin-bottom: 20px;
+        }
+        .text-rotation {
+            display: block;
+            position: relative;
+            animation: rotate-text 12s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        }
+        .text-rotation .text {
+            display: block;
+            height: 120px;
+            line-height: 120px;
+            text-align: center;
+            transition: opacity 0.5s;
+        }
+        @keyframes rotate-text {
+            0%, 19% { transform: translateY(0); }
+            25%, 44% { transform: translateY(-120px); }
+            50%, 69% { transform: translateY(-240px); }
+            75%, 94% { transform: translateY(-360px); }
+            100% { transform: translateY(0); }
         }
         .hero-content p { font-size: 1.2em; margin: 20px 0; color: var(--text-muted); }
         .cta-btn {
@@ -498,67 +520,391 @@
     }
 }
 header .logo {
-    width: 150px;
-    height: auto;
+    height: 50px; /* Match the header img height */
+    width: auto; /* Let width adjust automatically to maintain aspect ratio */
     margin-right: 20px;
     display: inline-block;
-    border-radius: 15px; /* Changed from circular to rounded rectangle for modern look */
+    border-radius: 8px; /* Changed from 50% circular to subtle rounded corners */
     box-shadow: 
-        0 8px 25px rgba(212, 175, 55, 0.15), /* Gold glow */
-        0 4px 15px rgba(0, 0, 0, 0.3); /* Dark shadow for depth */
-    transition: all 0.4s ease;
-    border: 2px solid rgba(212, 175, 55, 0.2); /* Subtle gold border */
-    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%);
-    backdrop-filter: blur(10px); /* Glass effect */
-    position: relative;
-    overflow: hidden;
-}
-
-header .logo::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.1), transparent);
-    transform: rotate(45deg);
-    transition: all 0.6s ease;
-    opacity: 0;
+        0 4px 15px rgba(212, 175, 55, 0.2), /* Gold glow to match your theme */
+        0 2px 8px rgba(0, 0, 0, 0.3); /* Dark shadow for depth */
+    transition: all 0.3s ease;
+    border: 1px solid rgba(212, 175, 55, 0.15); /* Subtle gold border */
+    background: rgba(212, 175, 55, 0.05); /* Very subtle gold background tint */
+    padding: 4px; /* Small padding for breathing room */
+    object-fit: contain; /* Ensures the image fits properly without distortion */
 }
 
 header .logo:hover {
-    transform: translateY(-3px) scale(1.05);
+    transform: translateY(-2px) scale(1.05);
     box-shadow: 
-        0 12px 35px rgba(212, 175, 55, 0.25),
-        0 8px 25px rgba(0, 0, 0, 0.4);
-    border-color: rgba(212, 175, 55, 0.4);
+        0 6px 20px rgba(212, 175, 55, 0.3),
+        0 4px 12px rgba(0, 0, 0, 0.4);
+    border-color: rgba(212, 175, 55, 0.3);
 }
 
-header .logo:hover::before {
+/* Remove conflicting rule */
+/* Removed empty ruleset for header img to avoid CSS errors */
+/* Search Section Styling */
+.search-section {
+    padding: 40px 20px;
+    background: var(--dark-bg);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.search-container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.search-container h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8em;
+    color: var(--gold-accent);
+    margin-bottom: 25px;
+}
+
+.search-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-bar input {
+    flex: 1;
+    max-width: 400px;
+    padding: 12px 20px;
+    background: var(--muted-bg);
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    border-radius: 25px; /* Rounded search bar */
+    color: var(--text-light);
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: var(--gold-accent);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+.search-bar button {
+    padding: 12px 20px;
+    background: rgba(212, 175, 55, 0.2);
+    color: var(--gold-accent);
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9em;
+}
+
+.search-bar button:hover {
+    background: var(--gold-accent);
+    color: var(--dark-bg);
+}
+
+.search-filters {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.search-filters select {
+    padding: 10px 15px;
+    background: var(--muted-bg);
+    color: var(--text-light);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.search-filters select:focus {
+    outline: none;
+    border-color: var(--gold-accent);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .search-bar {
+        flex-direction: column;
+    }
+    
+    .search-bar input {
+        max-width: 100%;
+    }
+    
+    .search-filters {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .search-filters select {
+        width: 200px;
+    }
+}
+/* Popular Routes Section Styling */
+.routes-section { 
+    background: var(--muted-bg);
+    border-radius: 18px;
+    margin: 40px auto 0 auto;
+    max-width: 1050px;
+    box-shadow: 0 10px 36px 0 rgba(212,175,55,0.07);
+    padding: 44px 24px 28px 24px;
+    animation: fadeIn 1s cubic-bezier(.59,.01,.41,1) both;
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(40px);}
+    to   { opacity: 1; transform: none;}
+}
+
+.routes-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.routes-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.3em;
+    color: var(--gold-accent);
+    margin-bottom: 10px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.17);
+    letter-spacing: 1px;
+    animation: titlePop 1.2s ease;
+}
+
+@keyframes titlePop {
+    from { transform: scale(1.1); opacity: 0; }
+    to   { transform: scale(1); opacity: 1;}
+}
+
+.routes-header p {
+    color: var(--text-muted);
+    font-size: 1.15em;
+    margin-bottom: 0;
+    opacity: 0.8;
+}
+
+.routes-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 28px;
+    padding-top: 12px;
+}
+
+.route-card {
+    background: var(--dark-bg);
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(212,175,55,0.10);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 24px 18px 18px 18px;
+    position: relative;
+    transition: box-shadow 0.3s, transform 0.22s, opacity 0.32s;
+    cursor: pointer;
+    border: 1.5px solid rgba(212,175,55,0.13);
+    opacity: 0.96;
+    will-change: transform, box-shadow;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 180px;
+}
+
+.route-card:hover, .route-card:focus {
+    box-shadow: 0 8px 32px rgba(212,175,55,0.15);
+    border-color: var(--gold-accent);
+    transform: translateY(-6px) scale(1.04);
     opacity: 1;
-    animation: shimmer 1.5s ease-in-out;
+    z-index: 1;
 }
 
-@keyframes shimmer {
-    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+.route-icon {
+    font-size: 2.2em;
+    margin-bottom: 8px;
+    color: var(--gold-accent);
+    text-shadow: 0 2px 8px rgba(212,175,55,0.2);
 }
 
-/* If your logo is an SVG, you can also style it */
-header .logo svg {
-    filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.3));
+.route-card:hover .route-icon {
+    transform: scale(1.1);
 }
 
-/* Alternative: If you want to add a premium metallic effect */
-header .logo.metallic {
-    background: linear-gradient(135deg, 
-        #d4af37 0%, 
-        #f4d03f 25%, 
-        #d4af37 50%, 
-        #b7950b 75%, 
-        #d4af37 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+.route-from {
+    font-size: 1.15em;
+    color: var(--text-light);
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.route-to {
+    font-size: 1.1em;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+.route-price {
+    background: rgba(212,175,55,0.1);
+    color: var(--gold-accent);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 600;
+    transition: all 0.3s;
+    border: 1px solid rgba(212,175,55,0.2);
+    margin-top: auto;
+}
+
+.route-card:hover .route-price {
+    background: var(--gold-accent);
+    color: var(--dark-bg);
+}
+
+@media (max-width: 1024px) {
+    .routes-section { padding: 26px 7px;}
+    .routes-list { grid-template-columns: 1fr 1fr; gap: 16px;}
+}
+@media (max-width: 576px) {
+    .routes-list { grid-template-columns: 1fr; gap: 12px;}
+}
+
+.route-icon {
+    font-size: 2em;
+    margin-bottom: 10px;
+    color: var(--gold-accent);
+    transition: color 0.2s;
+    filter: drop-shadow(0 2px 5px rgba(212,175,55,.16));
+}
+
+.route-card:hover .route-icon {
+    color: #fffbea;
+}
+
+.route-from {
+    font-weight: 600;
+    color: var(--text-light);
+    font-size: 1.09em;
+    margin-bottom: 1px;
+}
+
+.route-to {
+    color: var(--gold-accent);
+    font-size: 1em;
+    font-weight: 450;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+}
+
+.route-price {
+    color: var(--text-muted);
+    background: rgba(212,175,55,0.08);
+    border-radius: 8px;
+    padding: 6px 13px;
+    font-size: 0.99em;
+    margin-top: 6px;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    box-shadow: 0 2px 10px rgba(212,175,55,.07);
+    transition: background 0.2s;
+}
+
+.route-card:hover .route-price {
+    background: rgba(212,175,55,0.16);
+    color: var(--gold-accent);
+}
+
+@media (max-width: 850px) {
+    .routes-section { padding: 26px 7px;}
+    .routes-list { grid-template-columns: 1fr 1fr; gap: 16px;}
+}
+@media (max-width: 600px) {
+    .routes-list { grid-template-columns: 1fr; gap: 12px;}
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(32px);}
+  to   { opacity: 1; transform: none;}
+}
+.fleet-section, .routes-section, .hero, .profile-container, .login-container, .signup-container {
+  animation: fadeInUp 0.9s ease both;
+}
+.car-card, .route-card {
+  transition: box-shadow 0.3s, transform 0.22s, opacity 0.2s;
+  will-change: transform, box-shadow;
+}
+.car-card:hover, .route-card:hover {
+  box-shadow: 0 8px 30px rgba(212,175,55,0.17);
+  border-color: var(--gold-accent);
+  transform: translateY(-6px) scale(1.04);
+  opacity: 1;
+}
+.cta-btn, .reserve-btn {
+  box-shadow: 0 2px 15px rgba(212,175,55,0.12);
+  transition: box-shadow 0.27s, background 0.18s, transform 0.13s;
+}
+.cta-btn:hover, .reserve-btn:hover {
+  background: #b8962e;
+  transform: scale(1.07) translateY(-2px);
+  box-shadow: 0 4px 22px var(--gold-accent);
+}
+input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focus, input[type="date"]:focus {
+  outline: none;
+  border-color: var(--gold-accent);
+  box-shadow: 0 0 8px rgba(212,175,55,0.16);
+}
+h1, h2, h3, .fleet-section h2, .routes-section h2 {
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.13);
+}
+.fleet-section, .routes-section, .profile-container {
+  background: linear-gradient(120deg, rgba(212,175,55,0.08) 0%, var(--muted-bg) 100%);
+}
+footer {
+  border-top: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 -3px 12px rgba(0,0,0,0.08);
+}
+/* Remove or comment out the conflicting rule */
+/* Place this at the END of your CSS file */
+.hero-content h1.animated-heading {
+    height: 120px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 0;
+}
+
+.animated-heading .text-rotation {
+    display: block;
+    height: 120px;
+    position: relative;
+    animation: rotate-text 12s linear infinite;
+}
+
+.animated-heading .text-rotation .text {
+    display: block;
+    height: 120px;
+    line-height: 120px;
+    text-align: center;
+    opacity: 1;
+    margin: 0;
+    padding: 0;
+}
+
+@keyframes rotate-text {
+    0%, 24%   { transform: translateY(0); }
+    25%, 49%  { transform: translateY(-120px); }
+    50%, 74%  { transform: translateY(-240px); }
+    75%, 99%  { transform: translateY(-360px); }
+    100%      { transform: translateY(0); }
 }
