@@ -1245,3 +1245,8 @@ footer {
 html {
   scroll-behavior: smooth;
 }
+.car-desc {
+    color: #bbb;
+    font-size: 0.98em;
+    margin: 8px 0 0 0;
+}
